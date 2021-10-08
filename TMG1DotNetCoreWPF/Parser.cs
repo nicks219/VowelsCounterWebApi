@@ -17,12 +17,18 @@ namespace TMG1DotNetCoreWPF
         private readonly List<char> _charsUnicodeSpecials;
         private readonly string _regexUnicodeSpecials;
         private readonly string token = "";
+        private const int MIN_INDEX = 1;
+        private const int MAX_INDEX = 20;
+        private const int ERROR_RESPONSE = -1;
+        //Unicode Range: x00c0-x00ff
+        private const int DIACRITICAL_RANGE_MIN = 192;
+        private const int DIACRITICAL_RANGE_MAX = 255;
 
         internal Parser()
         {
+            //Unicode Single Chars:
             _charsUnicodeSpecials = new List<char> { '\u04e7', '\u0456' };
-            //Unicode: x00c0-x00ff (192-255)
-            for (int i = 192; i <= 255; i++)
+            for (int i = DIACRITICAL_RANGE_MIN; i <= DIACRITICAL_RANGE_MAX; i++)
             {
                 _charsUnicodeSpecials.Add((char)i);
             }
@@ -51,9 +57,9 @@ namespace TMG1DotNetCoreWPF
 
         internal void CreateIdList(TextCompositionEventArgs e, TextBox textBox)
         {
-            e.Handled = " ,;0123456789".IndexOf(e.Text) == -1;
+            e.Handled = " ,;0123456789".IndexOf(e.Text) == ERROR_RESPONSE;
             //Correction after input
-            if (",;".IndexOf(e.Text) != -1)
+            if (",;".IndexOf(e.Text) != ERROR_RESPONSE)
             {
                 GrubIdFrom(textBox);
                 BuildTextFromIds();
@@ -80,10 +86,9 @@ namespace TMG1DotNetCoreWPF
             _identificators = new();
             foreach (string identificator in text)
             {
-                bool success = Int32.TryParse(identificator, out int id);
-                if (success)
+                if (Int32.TryParse(identificator, out int id))
                 {
-                    if (id is >= 1 and <= 20)
+                    if (id is >= MIN_INDEX and <= MAX_INDEX)
                     {
                         //Added only correct Ids
                         _identificators.Add(id);
@@ -93,7 +98,7 @@ namespace TMG1DotNetCoreWPF
             }
         }
 
-        internal string ParseJson(String input)
+        internal string ParseJson(string input)
         {
             if (!Regex.IsMatch(input, "^({\"text\":\").*(\"})$"))
             {
@@ -101,23 +106,22 @@ namespace TMG1DotNetCoreWPF
                 return string.Empty;
             }
             var x = Regex.Replace(input, "^({\"text\":\")|(\"})$", "");
-            StringBuilder result = new StringBuilder(x);
+            StringBuilder result = new(x);
             return result.ToString();
         }
 
-        internal int CountVowels(String input)
+        internal int CountVowels(string input)
         {
-            StringBuilder result = new StringBuilder();
             //I can count only chars, but not "vowels" - because it's the sound.
             return new Regex("[aeiouAEIOUяиюыаоэуеёЯИЮЫАОЭУЕЁ" + _regexUnicodeSpecials + "]").Matches(input).Count;
         }
 
-        internal int CountWords(String input)
+        internal int CountWords(string input)
         {
             return input.Split(' ').Count();
         }
 
-        private void GetHeaders(WebClient wc)
+        private void PrintHeaders(WebClient wc)
         {
             foreach (string n in wc.ResponseHeaders.Keys)
             {
