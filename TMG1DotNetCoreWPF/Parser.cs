@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -13,26 +12,31 @@ namespace TMG1DotNetCoreWPF
 {
     internal class Parser
     {
-        private HashSet<int> _identificators;
-        private readonly List<char> _charsUnicodeSpecials;
-        private readonly string _regexUnicodeSpecials;
-        private readonly string token = "";
+        private HashSet<int> _idsForRequest;
+        private readonly List<char> _charsUnicodeDiacritical;
+        private readonly string _unicodeVowelsPattern;
         private const int MIN_INDEX = 1;
         private const int MAX_INDEX = 20;
         private const int ERROR_RESPONSE = -1;
         //Unicode Range: x00c0-x00ff
         private const int DIACRITICAL_RANGE_MIN = 192;
         private const int DIACRITICAL_RANGE_MAX = 255;
+        //Standart vowels:
+        private const string VOWELS = "aeiouAEIOUяиюыаоэуеёЯИЮЫАОЭУЕЁ";
+        //Net Access:
+        private const string TOKEN_NAME = "TMG-Api-Key";
+        private const string TOKEN_VALUE = "";
+        private const string URL = "https://tmgwebtest.azurewebsites.net/api/textstrings/";
 
         internal Parser()
         {
             //Unicode Single Chars:
-            _charsUnicodeSpecials = new List<char> { '\u04e7', '\u0456' };
+            _charsUnicodeDiacritical = new List<char> { '\u04e7', '\u0456' };
             for (int i = DIACRITICAL_RANGE_MIN; i <= DIACRITICAL_RANGE_MAX; i++)
             {
-                _charsUnicodeSpecials.Add((char)i);
+                _charsUnicodeDiacritical.Add((char)i);
             }
-            _regexUnicodeSpecials = new string(_charsUnicodeSpecials.ToArray());
+            _unicodeVowelsPattern = "[" + VOWELS + new string(_charsUnicodeDiacritical.ToArray()) + "]";
         }
 
         internal List<string> GetDataFromServer()
@@ -42,10 +46,10 @@ namespace TMG1DotNetCoreWPF
             try
             {
                 using WebClient wc = new WebClient { Proxy = null };
-                wc.Headers.Add("TMG-Api-Key", token);
-                foreach (int id in _identificators)
+                wc.Headers.Add(TOKEN_NAME, TOKEN_VALUE);
+                foreach (int id in _idsForRequest)
                 {
-                    result.Add(wc.DownloadString("https://tmgwebtest.azurewebsites.net/api/textstrings/" + id.ToString()));
+                    result.Add(wc.DownloadString(URL + id.ToString()));
                 }
             }
             catch (WebException ex)
@@ -69,7 +73,7 @@ namespace TMG1DotNetCoreWPF
             void BuildTextFromIds()
             {
                 StringBuilder result = new();
-                foreach (var r in _identificators)
+                foreach (var r in _idsForRequest)
                 {
                     result.Append(r);
                     result.Append(", ");
@@ -83,15 +87,15 @@ namespace TMG1DotNetCoreWPF
         internal void GrubIdFrom(TextBox textBox)
         {
             string[] text = textBox.Text.Split(',', ';');
-            _identificators = new();
+            _idsForRequest = new();
             foreach (string identificator in text)
             {
                 if (Int32.TryParse(identificator, out int id))
                 {
                     if (id is >= MIN_INDEX and <= MAX_INDEX)
                     {
-                        //Added only correct Ids
-                        _identificators.Add(id);
+                        //Added the correct Ids only
+                        _idsForRequest.Add(id);
                     }
                 }
 
@@ -100,20 +104,20 @@ namespace TMG1DotNetCoreWPF
 
         internal string ParseJson(string input)
         {
-            if (!Regex.IsMatch(input, "^({\"text\":\").*(\"})$"))
+            if (!Regex.IsMatch(input, _jsonTestRegex))
             {
                 MessageBox.Show("Sorry, server goes bad..");
                 return string.Empty;
             }
-            var x = Regex.Replace(input, "^({\"text\":\")|(\"})$", "");
+            var x = Regex.Replace(input, _jsonReplaceRegex, "");
             StringBuilder result = new(x);
             return result.ToString();
         }
 
         internal int CountVowels(string input)
         {
-            //I can count only chars, but not "vowels" - because it's the sound.
-            return new Regex("[aeiouAEIOUяиюыаоэуеёЯИЮЫАОЭУЕЁ" + _regexUnicodeSpecials + "]").Matches(input).Count;
+            //I can count only a chars, but not a "vowels" - because it's the sound.
+            return new Regex(_unicodeVowelsPattern).Matches(input).Count;
         }
 
         internal int CountWords(string input)
@@ -121,13 +125,7 @@ namespace TMG1DotNetCoreWPF
             return input.Split(' ').Count();
         }
 
-        private void PrintHeaders(WebClient wc)
-        {
-            foreach (string n in wc.ResponseHeaders.Keys)
-            {
-                //textBlock.Text += n + " = " + wc.ResponseHeaders[n] + "\n";}
-            }
-        }
+        private readonly string _jsonTestRegex = "^({\"text\":\").*(\"})$";
+        private readonly string _jsonReplaceRegex = "^({\"text\":\")|(\"})$";
     }
-
 }
