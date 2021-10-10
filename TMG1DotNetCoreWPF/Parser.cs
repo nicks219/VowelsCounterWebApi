@@ -13,7 +13,7 @@ namespace TMG1DotNetCoreWPF
         private const int ACCENTED_RANGE_MIN = 192;
         private const int ACCENTED_RANGE_MAX = 255;
         //Standart vowels:
-        private const string VOWELS = "aeiouAEIOUяиюыаоэуеёЯИЮЫАОЭУЕЁ";
+        private const string REGULAR_VOWELS = "aeiouAEIOUяиюыаоэуеёЯИЮЫАОЭУЕЁ";
 
         /// <summary>
         /// Creates a regex pattern to parse text with accented characters
@@ -26,7 +26,7 @@ namespace TMG1DotNetCoreWPF
             {
                 _charsUnicodeDiacritical.Add((char)i);
             }
-            _unicodeVowelsPattern = "[" + VOWELS + new string(_charsUnicodeDiacritical.ToArray()) + "]";
+            _unicodeVowelsPattern = "[" + REGULAR_VOWELS + new string(_charsUnicodeDiacritical.ToArray()) + "]";
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace TMG1DotNetCoreWPF
         }
 
         //RegEx patterns:
-        private readonly string _jsonTestRegex = "^({\"text\":\").*(\"})$";
-        private readonly string _jsonReplaceRegex = "^({\"text\":\")|(\"})$";
+        private static readonly string _jsonTestRegex = "^({\"text\":\").*(\"})$";
+        private static readonly string _jsonReplaceRegex = "^({\"text\":\")|(\"})$";
     }
 }

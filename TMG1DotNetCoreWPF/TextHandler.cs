@@ -13,7 +13,7 @@ namespace TMG1DotNetCoreWPF
         private const int MAX_INDEX = 20;
 
         /// <summary>
-        /// Checks the data and leaves only the correct ones
+        /// Checks the data and leaves only the correct entries
         /// </summary>
         /// <param name="e">Event type</param>
         /// <param name="textBox">XAML type</param>
@@ -23,7 +23,7 @@ namespace TMG1DotNetCoreWPF
             //Correction after entering a comma or semicolon
             if (",;".Contains(e.Text, StringComparison.InvariantCulture))
             {
-                CreateIdListFrom(textBox);
+                InitializeLineIdsFrom(textBox);
                 CreateTextFromIds();
                 e.Handled = true;
             }
@@ -49,22 +49,18 @@ namespace TMG1DotNetCoreWPF
         /// <returns>Collection with text Ids</returns>
         internal HashSet<int> GetIdListFrom(TextBox textBox)
         {
-            CreateIdListFrom(textBox);
+            InitializeLineIdsFrom(textBox);
             return _idsForRequest;
         }
 
         // Reads and validates string identifiers from an input text field
-        private void CreateIdListFrom(TextBox textBox)
+        private void InitializeLineIdsFrom(TextBox textBox)
         {
             string[] text = textBox.Text.Split(',', ';');
             _idsForRequest = new();
             foreach (string identificator in text)
             {
-                if (!int.TryParse(identificator, out int id))
-                {
-                    continue;
-                }
-                if (id is >= MIN_INDEX and <= MAX_INDEX)
+                if (int.TryParse(identificator, out int id) && id is >= MIN_INDEX and <= MAX_INDEX)
                 {
                     //Added the correct Ids only
                     _idsForRequest.Add(id);
