@@ -1,10 +1,10 @@
-﻿<Window x:Class="TMG1DotNetCoreWPF.TheMostGame"
+﻿<Window x:Class="TMG1DotNetCoreWPF.TextParser"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="The Most Game" Height="450" Width="800">
+        Title="Simple Text Parser" Height="450" Width="800">
 
     <Grid x:Name="LayoutRoot" Background="SandyBrown">
         <Grid.RowDefinitions>
@@ -36,7 +36,7 @@
             </ListView.View>
         </ListView>
 
-        <Button x:Name="sendButton" Width="100" Grid.Column="1" Grid.Row="1" FontWeight="Bold" Margin="20,10,20,29">Подсчитать</Button>
+        <Button x:Name="submitButton" Width="100" Grid.Column="1" Grid.Row="1" FontWeight="Bold" Margin="20,10,20,29">Подсчитать</Button>
         <TextBox x:Name="textBox" SelectionBrush="Blue" PreviewTextInput="TextBox_TextPreview" 
                  MaxLength="50" TextChanged="TextBox_TextChanged" Grid.Column="0" Grid.Row="1"
                  Width="300" Margin="350,10,10,29" FontWeight="Bold" />

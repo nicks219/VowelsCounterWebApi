@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,25 +10,32 @@ namespace TMG1DotNetCoreWPF
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class TheMostGame : Window
+    public partial class TextParser : Window
     {
         private readonly Parser _parser;
+        private readonly TextHandler _textHandler;
 
-        public TheMostGame()
+        public TextParser()
         {
             InitializeComponent();
-            Button c = LayoutRoot.Children.OfType<Button>().First(i => i.Name == "sendButton");
+            Button c = LayoutRoot.Children.OfType<Button>().First(i => i.Name == "submitButton");
             c.Click += Button_Click;
             _parser = new();
+            _textHandler = new();
         }
 
+        /// <summary>
+        /// Handles the submit button
+        /// </summary>
+        /// <param name="sender">Event sender</param>
+        /// <param name="e">Event args</param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            _parser.GrubIdFrom(textBox);
-            ObservableCollection<Line> lines = new ObservableCollection<Line>();
-            foreach(string json in _parser.GetDataFromServer())
+            var ids = _textHandler.GetIdListFrom(textBox);
+            ObservableCollection<Line> lines = new();
+            foreach(string json in Web.GetDataFromServer(ids))
             {
-                string text = _parser.ParseJson(json);
+                string text = _parser.TrimJson(json);
                 lines.Add(new Line()
                 {
                     Text = text,
@@ -38,13 +46,20 @@ namespace TMG1DotNetCoreWPF
             lineList.ItemsSource = lines;
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-        }
-
+        /// <summary>
+        /// Handles an input text field
+        /// </summary>
+        /// <param name="sender">Event sender</param>
+        /// <param name="e">Event args</param>
         private void TextBox_TextPreview(object sender, TextCompositionEventArgs e)
         {
-            _parser.CreateIdList(e, textBox);
+            _textHandler.RecreateTextData(e, textBox);
+        }
+
+        [Obsolete]
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //Empty
         }
     }
 }
