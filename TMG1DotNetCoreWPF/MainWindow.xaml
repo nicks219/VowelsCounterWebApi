@@ -3,27 +3,43 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TMG1DotNetCoreWPF"
         mc:Ignorable="d"
         Title="The Most Game" Height="450" Width="800">
+
     <Grid x:Name="LayoutRoot" Background="SandyBrown">
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="50"/>
-            <ColumnDefinition Width="50"/>
-        </Grid.ColumnDefinitions>
 
-        <TextBlock x:Name="textBlock" TextWrapping="Wrap" Grid.Column="0" Width="600" Grid.ColumnSpan="2" />
-        <TextBlock x:Name="words" Grid.Column="2" TextWrapping="Wrap" Width="30"/>
-        <TextBlock x:Name="vowels" Grid.Column="3" TextWrapping="Wrap" Width="30"/>
-        <Button x:Name="send" Grid.Column="0" Grid.Row="1" Width="100" Height="40">Подсчитать</Button>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="140"/>
+        </Grid.ColumnDefinitions>
+        
+        <ListView Name="binder" Margin="51,46,103,0"></ListView>
+        
+        <ListView Name="lineList" Margin="23,21,21,0" Grid.ColumnSpan="2" Width="Auto"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListView.View>
+                <GridView TextBlock.LineHeight="50">
+                    <GridViewColumn Width="{Binding ActualWidth, ElementName=binder, Mode=OneWay}" Header="Текст">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock TextWrapping="Wrap" Text="{Binding Path=Text}" FontWeight="Normal" FontStyle="Italic"></TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Path=Words}">Количество слов</GridViewColumn>
+                    <GridViewColumn Width="120" DisplayMemberBinding="{Binding Path=Vowels}">Количество гласных</GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <Button x:Name="sendButton" Width="100" Grid.Column="1" Grid.Row="1" FontWeight="Bold" Margin="20,10,20,29">Подсчитать</Button>
         <TextBox x:Name="textBox" SelectionBrush="Blue" PreviewTextInput="TextBox_TextPreview" 
-                 MaxLength="50" TextChanged="TextBox_TextChanged" Grid.Column="1" Grid.Row="1"
-                 Width="300" Height="40"></TextBox>
+                 MaxLength="50" TextChanged="TextBox_TextChanged" Grid.Column="0" Grid.Row="1"
+                 Width="300" Margin="350,10,10,29" FontWeight="Bold" />
+        <TextBlock HorizontalAlignment="Left" Margin="140,10,0,0" Grid.Row="1" Text="Идентификаторы строк:" VerticalAlignment="Top" Width="190" Background="SandyBrown" FontWeight="Bold" />
     </Grid>
 </Window>

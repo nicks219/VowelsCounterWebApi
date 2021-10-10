@@ -1,20 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace TMG1DotNetCoreWPF
 {
@@ -28,26 +16,26 @@ namespace TMG1DotNetCoreWPF
         public TheMostGame()
         {
             InitializeComponent();
-            Button c = LayoutRoot.Children.OfType<Button>().First(i => i.Name == "send");
+            Button c = LayoutRoot.Children.OfType<Button>().First(i => i.Name == "sendButton");
             c.Click += Button_Click;
             _parser = new();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            textBlock.Text = string.Empty;
-            words.Text = string.Empty;
-            vowels.Text = string.Empty;
             _parser.GrubIdFrom(textBox);
-
-            foreach (string json in _parser.GetDataFromServer())
+            ObservableCollection<Line> lines = new ObservableCollection<Line>();
+            foreach(string json in _parser.GetDataFromServer())
             {
                 string text = _parser.ParseJson(json);
-                textBlock.Text += text;
-                textBlock.Text += "\n\n";
-                words.Text += _parser.CountWords(text).ToString() + "\n\n";
-                vowels.Text += _parser.CountVowels(text).ToString() + "\n\n";
+                lines.Add(new Line()
+                {
+                    Text = text,
+                    Words = _parser.CountWords(text),
+                    Vowels = _parser.CountVowels(text)
+                });
             }
+            lineList.ItemsSource = lines;
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
