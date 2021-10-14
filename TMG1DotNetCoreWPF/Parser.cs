@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows;
+using TMG1DotNetCoreWPF.DTO;
 
 namespace TMG1DotNetCoreWPF
 {
@@ -13,8 +16,6 @@ namespace TMG1DotNetCoreWPF
         //Standart vowels:
         private const string REGULAR_VOWELS = "aeiouAEIOUяиюыаоэуеёЯИЮЫАОЭУЕЁ";
         //RegEx patterns:
-        private static readonly Regex _jsonTestRegex = new("^({\"text\":\").*(\"})$");
-        private static readonly Regex _jsonReplaceRegex = new("^({\"text\":\")|(\"})$");
         private static readonly Regex _unicodeVowelsPattern = InitVowelsRegex();
 
         /// <summary>
@@ -22,14 +23,17 @@ namespace TMG1DotNetCoreWPF
         /// </summary>
         /// <param name="input">String to process</param>
         /// <returns>String without json brackets</returns>
-        internal string TrimJson(string input)
+        internal string ConvertJson(string input)
         {
-            if (!_jsonTestRegex.IsMatch(input))
+            try
             {
-                MessageBox.Show("Sorry, server goes bad..");
+                return JsonConvert.DeserializeObject<TextResponse>(input).Text;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("SERVER_ERROR: " + ex.Message);
                 return string.Empty;
             }
-            return _jsonReplaceRegex.Replace(input, "");
         }
 
         /// <summary>

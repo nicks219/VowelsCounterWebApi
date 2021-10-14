@@ -1,4 +1,4 @@
-﻿namespace TMG1DotNetCoreWPF
+﻿namespace TMG1DotNetCoreWPF.DTO
 {
     /// <summary>
     /// DTO for XAML

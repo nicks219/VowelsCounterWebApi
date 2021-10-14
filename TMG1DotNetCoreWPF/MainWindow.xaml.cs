@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using TMG1DotNetCoreWPF.DTO;
 
 namespace TMG1DotNetCoreWPF
 {
@@ -12,6 +14,7 @@ namespace TMG1DotNetCoreWPF
     /// </summary>
     public partial class TextParser : Window
     {
+        private static readonly Web _web = BuildWeb();
         private readonly Parser _parser;
         private readonly TextHandler _textHandler;
 
@@ -24,6 +27,16 @@ namespace TMG1DotNetCoreWPF
             _textHandler = new();
         }
 
+        private static Web BuildWeb()
+        {
+            IConfiguration _config = new ConfigurationBuilder()
+                //.SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                //.AddJsonFile("secrets.json")
+                .AddUserSecrets<App>()
+                .Build();
+            return new Web(_config["TokenName"], _config["TokenValue"], _config["Url"]);
+        }
+
         /// <summary>
         /// Handles the submit button
         /// </summary>
@@ -33,9 +46,9 @@ namespace TMG1DotNetCoreWPF
         {
             var ids = _textHandler.GetIdListFrom(textBox);
             ObservableCollection<Line> lines = new();
-            foreach(string json in Web.GetDataFromServer(ids))
+            foreach(string oneString in _web.GetDataFromServer(ids))
             {
-                string text = _parser.TrimJson(json);
+                string text = _parser.ConvertJson(oneString);
                 lines.Add(new Line()
                 {
                     Text = text,
