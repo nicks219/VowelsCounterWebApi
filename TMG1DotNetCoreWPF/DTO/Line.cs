@@ -1,8 +1,8 @@
 ﻿namespace TMG1DotNetCoreWPF.DTO
 {
-    /// <summary>
-    /// DTO for XAML
-    /// </summary>
+    //
+    // Summary:
+    //     DTO for XAML
     public class Line
     {
         public string Text { get; set; }

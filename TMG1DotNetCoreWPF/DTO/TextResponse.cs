@@ -2,6 +2,9 @@
 
 namespace TMG1DotNetCoreWPF.DTO
 {
+    //
+    // Summary:
+    //     DTO for Json
     internal class TextResponse
     {
         [JsonProperty("text")]

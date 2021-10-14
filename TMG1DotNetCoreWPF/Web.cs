@@ -18,10 +18,12 @@ namespace TMG1DotNetCoreWPF
             _url = url;
         }
 
-        /// <summary>
-        /// Retrieves data from a remote server based on a list of text identifiers
-        /// </summary>
-        /// <returns>List of strings</returns>
+        //
+        // Summary:
+        //     Retrieves data from a remote server based on a list of text identifiers
+        // 
+        // Returns:
+        //     List of strings 
         internal List<string> GetDataFromServer(HashSet<int> _idsForRequest)
         {
             List<string> result = new();

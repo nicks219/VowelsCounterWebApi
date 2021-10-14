@@ -18,11 +18,15 @@ namespace TMG1DotNetCoreWPF
         //RegEx patterns:
         private static readonly Regex _unicodeVowelsPattern = InitVowelsRegex();
 
-        /// <summary>
-        /// Trims json brackets
-        /// </summary>
-        /// <param name="input">String to process</param>
-        /// <returns>String without json brackets</returns>
+        //
+        // Summary:
+        //     Trims json brackets
+        // 
+        // Parameters:
+        //     String to process
+        //
+        // Returns:
+        //     String without json brackets
         internal string ConvertJson(string input)
         {
             try
@@ -36,30 +40,38 @@ namespace TMG1DotNetCoreWPF
             }
         }
 
-        /// <summary>
-        /// Counts vowels in a line
-        /// </summary>
-        /// <param name="input">String to process</param>
-        /// <returns>Number of vowels</returns>
+        //
+        // Summary:
+        //     Counts vowels in a line
+        // 
+        // Parameters:
+        //     String to process
+        //
+        // Returns:
+        //     Number of vowels
         internal int CountVowels(string input)
         {
             //I can only count symbols, not "vowels" - because it is sound.
             return _unicodeVowelsPattern.Matches(input).Count;
         }
 
-        /// <summary>
-        /// Counts words in a line
-        /// </summary>
-        /// <param name="input">String to process</param>
-        /// <returns>Word count</returns>
+        //
+        // Summary:
+        //     Counts words in a line
+        // 
+        // Parameters:
+        //     String to process
+        //
+        // Returns:
+        //     Word count
         internal int CountWords(string input)
         {
             return input.Split(' ').Length;
         }
 
-        /// <summary>
+        //
+        // Summary:
         /// Creates a regex pattern to parse text with accented characters
-        /// </summary>
         private static Regex InitVowelsRegex()
         {
             List<char> _charsUnicodeDiacritical;

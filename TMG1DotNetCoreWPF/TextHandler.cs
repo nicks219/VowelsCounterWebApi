@@ -13,11 +13,15 @@ namespace TMG1DotNetCoreWPF
         private const int MIN_INDEX = 1;
         private const int MAX_INDEX = 20;
 
-        /// <summary>
-        /// Checks the data and leaves only the correct entries
-        /// </summary>
-        /// <param name="e">Event type</param>
-        /// <param name="textBox">XAML type</param>
+        //
+        // Summary:
+        //     Checks the data and leaves only the correct entries
+        // 
+        // Parameters:
+        //     Event type 
+        //
+        // Parameters:
+        //     XAML type 
         internal void RecreateTextData(TextCompositionEventArgs e, TextBox textBox)
         {
             e.Handled = !" ,;0123456789".Contains(e.Text, StringComparison.InvariantCulture);
@@ -43,11 +47,15 @@ namespace TMG1DotNetCoreWPF
             }
         }
 
-        /// <summary>
-        /// Creates valid string identifiers from an input text field
-        /// </summary>
-        /// <param name="textBox">XAML type</param>
-        /// <returns>Collection with text Ids</returns>
+        //
+        // Summary:
+        //     Creates valid string identifiers from an input text field
+        // 
+        // Parameters:
+        //     XAML type</param>
+        //
+        // Returns:
+        //     Collection with text Ids
         internal HashSet<int> GetIdListFrom(TextBox textBox)
         {
             InitializeIdsFrom(textBox);

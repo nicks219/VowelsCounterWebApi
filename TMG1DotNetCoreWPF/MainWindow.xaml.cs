@@ -9,9 +9,9 @@ using TMG1DotNetCoreWPF.DTO;
 
 namespace TMG1DotNetCoreWPF
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    //
+    // Summary:
+    //     Interaction logic for MainWindow.xaml
     public partial class TextParser : Window
     {
         private static readonly Web _web = BuildWeb();
@@ -37,11 +37,15 @@ namespace TMG1DotNetCoreWPF
             return new Web(_config["TokenName"], _config["TokenValue"], _config["Url"]);
         }
 
-        /// <summary>
-        /// Handles the submit button
-        /// </summary>
-        /// <param name="sender">Event sender</param>
-        /// <param name="e">Event args</param>
+        //
+        // Summary:
+        //     Handles the submit button
+        // 
+        // Parameters:
+        //     Event sender 
+        // 
+        // Parameters:
+        //     Event args 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var ids = _textHandler.GetIdListFrom(textBox);
@@ -59,11 +63,15 @@ namespace TMG1DotNetCoreWPF
             lineList.ItemsSource = lines;
         }
 
-        /// <summary>
-        /// Handles an input text field
-        /// </summary>
-        /// <param name="sender">Event sender</param>
-        /// <param name="e">Event args</param>
+        //
+        // Summary:
+        //     Handles an input text field
+        // 
+        // Parameters:
+        //     Event sender 
+        // 
+        // Parameters:
+        //     Event args 
         private void TextBox_TextPreview(object sender, TextCompositionEventArgs e)
         {
             _textHandler.RecreateTextData(e, textBox);
