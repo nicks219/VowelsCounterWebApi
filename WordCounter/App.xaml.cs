@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace TMG1DotNetCoreWPF
+namespace WordCounter
 {
     /// <summary>
     /// Interaction logic for App.xaml

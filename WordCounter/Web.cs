@@ -2,7 +2,7 @@
 using System.Net;
 using System.Windows;
 
-namespace TMG1DotNetCoreWPF
+namespace WordCounter
 {
     internal class Web
     {

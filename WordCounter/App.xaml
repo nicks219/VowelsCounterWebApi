@@ -1,7 +1,7 @@
-﻿<Application x:Class="TMG1DotNetCoreWPF.App"
+﻿<Application x:Class="WordCounter.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:TMG1DotNetCoreWPF"
+             xmlns:local="clr-namespace:WordCounter"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

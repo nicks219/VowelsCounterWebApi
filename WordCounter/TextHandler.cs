@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Linq;
 
-namespace TMG1DotNetCoreWPF
+namespace WordCounter
 {
     internal class TextHandler
     {

@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows;
-using TMG1DotNetCoreWPF.DTO;
+using WordCounter.DTO;
 
-namespace TMG1DotNetCoreWPF
+namespace WordCounter
 {
     // Accepts Unicode accented characters
     internal class Parser

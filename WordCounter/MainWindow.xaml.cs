@@ -5,9 +5,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using TMG1DotNetCoreWPF.DTO;
+using WordCounter.DTO;
 
-namespace TMG1DotNetCoreWPF
+namespace WordCounter
 {
     //
     // Summary:

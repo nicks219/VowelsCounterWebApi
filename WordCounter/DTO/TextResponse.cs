@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace TMG1DotNetCoreWPF.DTO
+namespace WordCounter.DTO
 {
     //
     // Summary:
