@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using WordCounter.DTO;
@@ -15,6 +16,8 @@ namespace WordCounter
         private const int ACCENTED_RANGE_MAX = 255;
         //Standart vowels:
         private const string REGULAR_VOWELS = "aeiouAEIOUяиюыаоэуеёЯИЮЫАОЭУЕЁ";
+        private static readonly char[] _includeUnicodeDiacriticals = { '\u04e7', '\u0456' };
+        private static readonly char[] _excludeUnicodeDiacriticals = {  };
         //RegEx patterns:
         private static readonly Regex _unicodeVowelsPattern = InitVowelsRegex();
 
@@ -74,14 +77,13 @@ namespace WordCounter
         /// Creates a regex pattern to parse text with accented characters
         private static Regex InitVowelsRegex()
         {
-            List<char> _charsUnicodeDiacritical;
             //Single Unicode accented characters:
-            _charsUnicodeDiacritical = new List<char> { '\u04e7', '\u0456' };
-            for (int i = ACCENTED_RANGE_MIN; i <= ACCENTED_RANGE_MAX; i++)
-            {
-                _charsUnicodeDiacritical.Add((char)i);
-            }
-            return new Regex("[" + REGULAR_VOWELS + new string(_charsUnicodeDiacritical.ToArray()) + "]");
+            IEnumerable<char> diacriticalRange = new List<int>(Enumerable.Range(ACCENTED_RANGE_MIN, (ACCENTED_RANGE_MAX - ACCENTED_RANGE_MIN) + 1))
+                .Select(i => (char)i)
+                .ToArray()
+                .Union(_includeUnicodeDiacriticals)
+                .Except(_excludeUnicodeDiacriticals);
+            return new Regex("[" + REGULAR_VOWELS + new string(diacriticalRange.ToArray()) + "]");
         }
     }
 }
